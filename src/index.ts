@@ -1,15 +1,16 @@
 import useReflare from 'reflare';
 
-const handleRequest = async (
-  request: Request,
-): Promise<Response> => {
+async function handleRequest(request: Request): Promise<Response> {
   const reflare = await useReflare();
 
   reflare.push({
     path: '/*',
     upstream: {
-      domain: 'httpbin.org',
+      domain: 'github.com',
       protocol: 'https',
+      onRequest: (request: Request, url: string): Request => {
+        return new Request(url.replace('/', '/electron/electron/releases/download/'), request);
+      }
     },
   });
 
